@@ -1,5 +1,6 @@
 # WebLessonProject
 Project done in-class
 
-Hello world, here we go again.
-Text sample 2
+Clipboard for repeated login
+git config --global user.email "lenyn.taka@gmail.com"
+git config --global user.name "Lenyn-T"
