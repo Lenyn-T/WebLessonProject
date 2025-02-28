@@ -3,6 +3,7 @@ package com.programming.web.fatec.api_fatec.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestController
 public class ExampleController {
@@ -38,38 +39,42 @@ public class ExampleController {
     }
 
     @GetMapping("/evenodd/{evodd}")
-    public String EvenOdd(@PathVariable Integer evodd){
+    public String EvenOdd(@PathVariable String evodd){
+        
         try {
-            if(evodd % 2 == 0){
+            Integer result = Integer.parseInt(evodd);
+            
+            if(result % 2 == 0){
                 return "The number " + evodd + " is Even";
-            }else if (evodd % 2 != 0) {
+            }else if (result % 2 != 0) {
                 return "The number " + evodd + " is Odd";
             }else{
                 return "Invalid number.";
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return "Invalid number.";
         }
     }
 
-    @GetMapping("/bodmassindex/{bmiheight}/{bmiweight}")
-    public String BodyMassIndex(@PathVariable Integer bmiheight, Integer bmiweight){
-        Double bmiresult = bmiweight / Math.pow(bmiheight, 2);
+    @GetMapping("/bodymassindex/{bmiheight}/{bmiweight}")
+    public String BodyMassIndex(@PathVariable String bmiheight, @PathVariable String bmiweight){
         try {
+            Integer tocentimeters = Integer.parseInt(bmiheight) / 100;
+            Double bmiresult = Integer.parseInt(bmiweight) / Math.pow(tocentimeters, 2);
             if (bmiresult < 18.5) {
                 return "Underweight.";
-            }else if (bmiresult > 18.5 && bmiresult < 25) {
+            }else if (bmiresult >= 18.5 && bmiresult <= 24.9) {
                 return "Regular weight.";
-            }else if (bmiresult >= 25 && bmiresult < 30) {
+            }else if (bmiresult >= 25 && bmiresult <= 29.9) {
                 return "Overweight";
-            }else if (bmiresult >= 30 && bmiresult < 35) {
+            }else if (bmiresult >= 30 && bmiresult <= 34.9) {
                 return "1st grade Obesity";
-            }else if (bmiresult >= 35 && bmiresult < 40) {
+            }else if (bmiresult >= 35 && bmiresult <= 39.9) {
                 return "2nd grade Obesity";
-            }else {
+            }else{
                 return "3rd grade Obesity";
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             return "Invalid Data.";
         }
     }
