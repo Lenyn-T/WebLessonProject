@@ -33,7 +33,7 @@ public class ClienteController {
         return clientes;
     }
 
-    @GetMapping("/deletarCliente/{id}")
+    @DeleteMapping("/deletarCliente/{id}")
     public String DeletarCliente(@PathVariable Long id){
         for (Cliente cliente: clientes){
             if (cliente.getId().equals(id)) {

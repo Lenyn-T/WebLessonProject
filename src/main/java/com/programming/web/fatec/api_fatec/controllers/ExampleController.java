@@ -9,7 +9,7 @@ public class ExampleController {
     
     @GetMapping
     public String HelloWorldDefault(){
-        return "hello, welcome to this testing grounds.";
+        return "hello, welcome to these testing grounds.";
     }
 
     @GetMapping("{name}")
@@ -58,20 +58,21 @@ public class ExampleController {
     @GetMapping("/bodymassindex/{bmiheight}/{bmiweight}")
     public String BodyMassIndex(@PathVariable String bmiheight, @PathVariable String bmiweight){
         try {
-            Integer tocentimeters = Integer.parseInt(bmiheight) / 100;
-            Double bmiresult = Integer.parseInt(bmiweight) / Math.pow(tocentimeters, 2);
+            Double tometers = Double.parseDouble(bmiheight) / 100;
+            Double bmiresult;
+            bmiresult = Integer.parseInt(bmiweight) / (tometers*tometers);
             if (bmiresult < 18.5) {
-                return "Underweight.";
+                return "Underweight at bmi "+bmiresult;
             }else if (bmiresult >= 18.5 && bmiresult <= 24.9) {
-                return "Regular weight.";
+                return "Regular weight at bmi "+bmiresult;
             }else if (bmiresult >= 25 && bmiresult <= 29.9) {
-                return "Overweight";
+                return "Overweight at bmi "+bmiresult;
             }else if (bmiresult >= 30 && bmiresult <= 34.9) {
-                return "1st grade Obesity";
+                return "1st grade Obesity at bmi "+bmiresult;
             }else if (bmiresult >= 35 && bmiresult <= 39.9) {
-                return "2nd grade Obesity";
+                return "2nd grade Obesity at bmi "+bmiresult;
             }else{
-                return "3rd grade Obesity";
+                return "3rd grade Obesity at bmi "+bmiresult;
             }
         } catch (NumberFormatException e) {
             return "Invalid Data.";
