@@ -1,5 +1,6 @@
 package com.programming.web.fatec.api_fatec.controllers;
 
+import com.programming.web.fatec.api_fatec.domain.cliente.ClienteService;
 import com.programming.web.fatec.api_fatec.entities.Cliente;
 
 import java.util.ArrayList;
@@ -7,11 +8,15 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cliente")
 public class ClienteController {
+    @Autowired
+    private ClienteService clienteService;
+
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class.getName());
 
     private final List<Cliente> clientes = new ArrayList<>();
@@ -30,7 +35,7 @@ public class ClienteController {
 
     @GetMapping("/listarClientes")
     public List<Cliente> ListarClientes() {
-        return clientes;
+        return clienteService.listarClientes();
     }
 
     @DeleteMapping("/deletarCliente/{id}")
