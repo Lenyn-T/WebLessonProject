@@ -9,6 +9,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,22 +22,25 @@ public class ClienteController {
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class.getName());
 
     private final List<Cliente> clientes = new ArrayList<>();
-    private Long idCount = 1L;
+    //private Long idCount = 1L;
 
     //http://localhost:8080/api/cliente/criarCliente => POST
     @PostMapping("/criarCliente")
-    public String CriarCliente(@RequestBody Cliente cliente){
+    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente){
 
-        cliente.setId(idCount++);
-        clientes.add(cliente);
-
-        logger.info("Recebido JSON: Nome={}, Idade={}", cliente.getNome(), cliente.getIdade());
-        return "O Cliente "+cliente.getNome()+" de idade "+cliente.getIdade()+" morador da rua: "+cliente.getLogradouro()+" foi criado.";
+        Cliente novoCliente = clienteService.criarCliente(cliente);
+        logger.info("Cliente criado: Nome={}, Idade={}", novoCliente.getNome(), novoCliente.getIdade());
+        return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
+        
+        //cliente.setId(idCount++);
+        //clientes.add(cliente);
+        //logger.info("Recebido JSON: Nome={}, Idade={}", cliente.getNome(), cliente.getIdade());
+        //return "O Cliente "+cliente.getNome()+" de idade "+cliente.getIdade()+" morador da rua: "+cliente.getLogradouro()+" foi criado.";
     }
 
     @GetMapping("/listarClientes")
-    public List<Cliente> ListarClientes() {
-        return clienteService.listarClientes();
+    public ResponseEntity<List<Cliente>> ListarClientes() {
+        return new ResponseEntity<>(clienteService.listarClientes(), HttpStatus.OK);
     }
 
     @DeleteMapping("/deletarCliente/{id}")

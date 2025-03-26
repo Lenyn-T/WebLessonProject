@@ -4,7 +4,9 @@ Project done in-class
 Required plugin in VSCode:  
 Extension Pack for Java  
 Spring Boot Dashboard
-
+Comparing materials:  
+https://github.com/h2danilofatec/projeto-1semestre-2025/  
+  
 Clipboard for repeated login  
 git config --global user.email "lenyn.taka@gmail.com"  
 git config --global user.name "Lenyn-T"  

@@ -16,7 +16,8 @@ public class ClienteService {
         return clienteRepository.findAll();
     }
 
-    public Cliente criarCliente(){
-        return clienteRepository.save(criarCliente());
+    public Cliente criarCliente(Cliente cliente){
+        cliente.setId(null);
+        return clienteRepository.save(cliente);
     }
 }
