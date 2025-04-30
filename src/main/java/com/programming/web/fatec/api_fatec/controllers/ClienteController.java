@@ -3,8 +3,8 @@ package com.programming.web.fatec.api_fatec.controllers;
 import com.programming.web.fatec.api_fatec.domain.cliente.ClienteService;
 import com.programming.web.fatec.api_fatec.entities.Cliente;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,21 +21,14 @@ public class ClienteController {
 
     private static final Logger logger = LoggerFactory.getLogger(ClienteController.class.getName());
 
-    private final List<Cliente> clientes = new ArrayList<>();
     //private Long idCount = 1L;
 
     //http://localhost:8080/api/cliente/criarCliente => POST
     @PostMapping("/criarCliente")
-    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente){
-
+    public ResponseEntity<Cliente> criarCliente(@RequestBody Cliente cliente) {
         Cliente novoCliente = clienteService.criarCliente(cliente);
         logger.info("Cliente criado: Nome={}, Idade={}", novoCliente.getNome(), novoCliente.getIdade());
         return new ResponseEntity<>(novoCliente, HttpStatus.CREATED);
-        
-        //cliente.setId(idCount++);
-        //clientes.add(cliente);
-        //logger.info("Recebido JSON: Nome={}, Idade={}", cliente.getNome(), cliente.getIdade());
-        //return "O Cliente "+cliente.getNome()+" de idade "+cliente.getIdade()+" morador da rua: "+cliente.getLogradouro()+" foi criado.";
     }
 
     @GetMapping("/listarClientes")
@@ -44,26 +37,29 @@ public class ClienteController {
     }
 
     @DeleteMapping("/deletarCliente/{id}")
-    public String DeletarCliente(@PathVariable Long id){
-        for (Cliente cliente: clientes){
-            if (cliente.getId().equals(id)) {
-                clientes.remove(cliente);
-                return "Cliente "+cliente.getNome()+" removido.";
-            }
+    public ResponseEntity<String> deletarCliente(@PathVariable Long id) {
+        boolean removido = clienteService.deletarCliente(id);
+        if (removido) {
+            return ResponseEntity.ok("Cliente removido com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Não existe cliente com id: " + id);
         }
-
-        return "Cliente inexistente.";
     }
 
     @PutMapping("/alterarCliente/{id}/{nome}")
-    public String AlterarCliente(@PathVariable Long id, @PathVariable String nome){
-        for (Cliente cliente: clientes){
-            if (cliente.getId().equals(id)) {
-                cliente.setNome(nome);
-                return "Cliente id "+cliente.getId()+" alterado nome para: "+cliente.getNome();
-            }
+    public ResponseEntity<String> atualizarCliente(@PathVariable Long id, @RequestBody Cliente clienteAtualizado) {
+        boolean atualizado = clienteService.atualizarCliente(id, clienteAtualizado);
+        if (atualizado) {
+            return ResponseEntity.ok("Cliente atualizado com sucesso!");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente com ID " + id + " não encontrado.");
         }
+    }
 
-        return "Cliente inexistente.";
+    @GetMapping("/buscarCliente/{id}")
+    public ResponseEntity<?> buscarClientePorId(@PathVariable Long id) {
+        Optional<Cliente> cliente = clienteService.buscarClientePorId(id);
+         return cliente.<ResponseEntity<?>>map(ResponseEntity::ok)
+                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente com ID " + id + " não encontrado."));
     }
 }

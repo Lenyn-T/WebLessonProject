@@ -1,4 +1,4 @@
-package com.fatec.projeto.projeto2025.exception;
+package com.programming.web.fatec.api_fatec.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
